@@ -1,9 +1,9 @@
-// import LoginPage from '../pages/Login';
-// import DashboardPage from '@/pages/Dashboard';
+import  Login  from "@/pages/Login";
 import type { AppRoute } from "../types/type";
+import Dashboard from "@/pages/Dashboard";
 
 export const appRoutes: AppRoute[] = [
-  // { path: '/login', element: <LoginPage />, guest: true },
-  // { path: '/dashboard', element: <DashboardPage /> , protected: true },
+  { path: '/login', element: <Login />, guest: true },
+  { path: '/dashboard', element: <Dashboard /> , protected: true },
 ];
 

@@ -1,3 +1,4 @@
+import type { OrderStatus, PaymentMethod } from "@/constants/typeConstants";
 import type { JSX } from "react";
 
 export interface AppRoute {
@@ -12,6 +13,32 @@ export interface User {
   id: string;
   name: string;
   username: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PendingOrder {
+  _id: string;
+  user: {
+    _id: string;
+    name: string;
+    avatar: string; 
+  };
+  orderItems: {
+    product: {
+      _id: string;
+      name: string;
+      image: string;
+      foodType: string;
+    };
+    quantity: number;
+    price: number;
+  }[];
+  orderNo: number;
+  totalAmount: number;
+  status: OrderStatus;
+  paymentMethod: PaymentMethod;
+  isPaid: boolean;
   createdAt: string;
   updatedAt: string;
 }

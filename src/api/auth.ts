@@ -1,7 +1,7 @@
 import type { AppDispatch } from "@/store/store";
 import { apiConnector } from "@/utils/apiConnector";
 import { AuthEndpoints } from "./apis";
-import { setUser } from "@/store/features/auth.slice";
+import { clearUser, setUser } from "@/store/features/auth.slice";
 import type { User } from "@/types/type";
 import toast from "react-hot-toast";
 
@@ -41,3 +41,23 @@ export const fetchProfile = () => async (dispatch: AppDispatch) : Promise<boolea
         return false;
     }
 }   
+
+export const logout = () => async (dispatch: AppDispatch) : Promise<boolean> => {
+    try {
+        const res = await apiConnector('POST', AuthEndpoints.LOGOUT);
+        
+        if (res.success) {
+            dispatch(clearUser());
+            toast.success("Logged Out");
+            return true;
+        }
+        else {
+            toast.error(res.message || "Logout failed");
+            return false;
+        }
+    } catch (error) {
+        console.error("Logout error:", error);
+        toast.error("Unable to logout");
+        return false;
+    }
+}

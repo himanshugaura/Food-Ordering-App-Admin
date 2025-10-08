@@ -41,42 +41,60 @@ const AppRouter: React.FC = () => {
 
   return (
     <Router>
-      <Routes>
-        {appRoutes.map((route) => {
-          let element = route.element;
+  <Routes>
+    {appRoutes.map((route) => {
+      let element = route.element;
 
-          if (route.protected) {
-            element = (
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                {route.element}
-              </ProtectedRoute>
-            );
-          } else if (route.guest) {
-            element = (
-              <GuestRoute isAuthenticated={isAuthenticated}>
-                {route.element}
-              </GuestRoute>
-            );
-          }
+      if (route.protected) {
+        element = (
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            {route.element}
+          </ProtectedRoute>
+        );
+      } else if (route.guest) {
+        element = (
+          <GuestRoute isAuthenticated={isAuthenticated}>
+            {route.element}
+          </GuestRoute>
+        );
+      }
 
-          return <Route key={route.path} path={route.path} element={element} />;
-        })}
+      return (
+        <Route key={route.path} path={route.path} element={element}>
+          {/* Handle child routes if present */}
+          {route.children?.map((child) => (
+            <Route
+              key={child.path}
+              path={child.path}
+              element={child.element}
+            />
+          ))}
+        </Route>
+      );
+    })}
 
-        <Route
-          path="/"
-          element={
-            isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
-          }
-        />
+    {/* Redirect root */}
+    <Route
+      path="/"
+      element={
+        isAuthenticated
+          ? <Navigate to="/dashboard/home" replace />
+          : <Navigate to="/login" replace />
+      }
+    />
 
-        <Route
-          path="*"
-          element={
-            isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
-          }
-        />
-      </Routes>
-    </Router>
+    {/* Catch-all */}
+    <Route
+      path="*"
+      element={
+        isAuthenticated
+          ? <Navigate to="/dashboard/home" replace />
+          : <Navigate to="/login" replace />
+      }
+    />
+  </Routes>
+</Router>
+
   );
 };
 

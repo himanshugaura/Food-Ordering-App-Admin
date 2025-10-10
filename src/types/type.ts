@@ -1,4 +1,4 @@
-import type { OrderStatus, PaymentMethod } from "@/constants/typeConstants";
+import type { FoodType, OrderStatus, PaymentMethod } from "@/constants/typeConstants";
 import type { JSX } from "react";
 
 export interface AppRoute {
@@ -41,4 +41,31 @@ export interface PendingOrder {
   isPaid: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Category  {
+  _id: string;
+  name: string;
+  image: {
+    publicId: string;
+    url: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Product  {
+  _id: string;
+  name: string;
+  description: string;
+  foodType: FoodType;
+  isAvailable: Boolean;
+  price: number;
+  category: Category;
+  image: {
+    publicId: string;
+    url: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
 }

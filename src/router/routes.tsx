@@ -17,7 +17,7 @@ export const appRoutes: AppRoute[] = [
       { path: "", element: <Home /> },
       { path: "home", element: <Home /> },
       { path: "products", element: <Products /> },
-      { path: "products/:id", element: <div>Product Details</div> },
+      { path: "product/:id", element: <div>Product Details</div> },
       { path: "category", element: <Category /> },
       { path: "analytics", element: <Analytics /> },
       { path: "settings", element: <Settings /> },

@@ -1,5 +1,3 @@
-import { Input } from "@/components/ui/input"
-import { Search } from "lucide-react"
 import OrderCard from "./OrderCard"
 import { DummyOrders } from "@/constants/DummyData"
 import type { PendingOrder } from "@/types/type"
@@ -11,15 +9,7 @@ const Home = () => {
         Manage Your Orders
       </h1>
       
-      <div className="relative w-full max-w-md mb-6 sm:mb-8">
-        <Input
-          placeholder="Search orders by id or customer name..."
-          className="w-full py-4 sm:py-5 pl-4 sm:pl-5 pr-12 sm:pr-14 rounded-xl border-2 text-white placeholder:text-gray-400 text-base sm:text-lg shadow-lg focus:ring-2 focus:ring-blue-500"
-        />
-        <Search className="absolute right-4 sm:right-5 top-1/2 -translate-y-1/2 text-white opacity-70 pointer-events-none" size={24} />
-      </div>
-      
-      <div className="w-full max-w-7xl">
+      <div className="w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
           {DummyOrders.map((order) => (
             <div key={order._id}>

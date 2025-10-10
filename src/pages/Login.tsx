@@ -164,7 +164,7 @@ const Login = () => {
           <Button
             onClick={handleSubmit}
             disabled={isLoading}
-            className="w-full h-12 sm:h-13 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-white font-semibold shadow-lg shadow-cyan-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 active:scale-[0.98] text-sm sm:text-base rounded-lg"
+            className="w-full h-12 sm:h-13 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-white font-semibold shadow-lg shadow-cyan-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 active:scale-[0.98] text-sm sm:text-base rounded-lg cursor-pointer"
           >
             {isLoading ? (
               <span className="flex items-center gap-2.5">

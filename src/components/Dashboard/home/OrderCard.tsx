@@ -57,7 +57,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
                   <p className="text-sm sm:text-base font-semibold text-gray-900  mb-0.5">
                     {item.product.name}
                   </p>
-                  <p className="text-xs text-gray-500 font-medium">Quantity: {item.quantity}</p>
+                  <p className="text-xs text-yellow-500 font-medium">Quantity: {item.quantity}</p>
                 </div>
                 <span className="text-sm sm:text-base font-bold text-gray-900 flex-shrink-0 bg-gray-50 px-3 py-1.5 rounded-lg">
                   ₹{item.price}
@@ -103,10 +103,10 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
 
       {/* Action Buttons */}
       <div className="flex gap-3">
-        <button className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold text-sm sm:text-base py-3 px-4 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0">
+        <button className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold text-sm sm:text-base py-3 px-4 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
           Accept
         </button>
-        <button className="flex-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold text-sm sm:text-base py-3 px-4 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0">
+        <button className="flex-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold text-sm sm:text-base py-3 px-4 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
           Reject
         </button>
       </div>

@@ -210,7 +210,7 @@ export const ImageUploadWithCrop: React.FC<ImageUploadWithCropProps> = ({
             <Upload className="w-8 h-8 text-white" />
           </div>
           <div>
-            <p className="text-lg font-semibold text-gray-300">Upload Food Image</p>
+            <p className="text-lg font-semibold text-gray-300">Upload Image</p>
             <p className="text-sm text-gray-400 mt-1">Click to browse or drag and drop</p>
             <p className="text-xs text-gray-500 mt-2">PNG, JPG, WEBP up to 500KB</p>
           </div>

@@ -19,5 +19,7 @@ export const CategoryEndpoints = {
     CREATE_CATEGORY: `${BASE_URL}/menu/add/category`,
     GET_ALL_CATEGORIES: `${BASE_URL}/menu/get-categories`,
     GET_PRODUCT_BY_CATEGORY: (id : string) => `${BASE_URL}/menu/get-products-by-category/${id}`,
+    GET_CATEGORY_BY_ID: (id: string) => `${BASE_URL}/menu/get-category/${id}`,
     UPDATE_CATEGORY: (id: string) => `${BASE_URL}/menu/update/category/${id}`,
+    DELETE_CATEGORY: (id: string) => `${BASE_URL}/menu/delete/category/${id}`,
 }

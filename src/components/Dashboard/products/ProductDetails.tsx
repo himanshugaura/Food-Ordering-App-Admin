@@ -168,7 +168,7 @@ export const ProductDetails: React.FC = () => {
 
   return (
     <div className="min-h-screen py-8 px-4">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-2xl mx-auto overflow-hidden">
         {/* Header */}
         <div className="text-center mb-8 animate-in fade-in slide-in-from-top duration-700">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full mb-4">
@@ -183,7 +183,7 @@ export const ProductDetails: React.FC = () => {
         </div>
 
         {/* Buttons */}
-        <div className="flex justify-end gap-2 mb-4">
+        <div className="flex justify-end gap-2 mb-4 animate-in fade-in slide-in-from-right duration-700">
           {!isEditing ? (
             <Button
               variant="outline"

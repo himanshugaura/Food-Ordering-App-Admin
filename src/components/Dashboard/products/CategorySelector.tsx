@@ -1,21 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
-
-const categories = [
-  'Appetizers',
-  'Main Course',
-  'Desserts',
-  'Beverages',
-  'Salads',
-  'Soups',
-  'Sandwiches',
-  'Pizza',
-  'Pasta',
-  'Seafood',
-  'Vegetarian',
-  'Vegan',
-  'Gluten-Free'
-];
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store/store';
+import { useAppDispatch } from '@/store/hook';
+import { fetchAllCategories } from '@/api/category';
 
 interface CategorySelectorProps {
   value: string;
@@ -26,6 +14,17 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
   value,
   onChange,
 }) => {
+  const categories = useSelector((state : RootState) => state.category.categories) || [];
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const fetchData = async () => {
+     await dispatch(fetchAllCategories());
+    }
+    if (categories.length === 0) {
+      fetchData();
+    }
+  }, [dispatch])
   return (
     <div className="relative">
       <select
@@ -36,8 +35,8 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
       >
         <option value="">Select a category</option>
         {categories.map((category) => (
-          <option key={category} value={category}>
-            {category}
+          <option key={category._id} value={category._id}>
+            {category.name.toUpperCase()}
           </option>
         ))}
       </select>

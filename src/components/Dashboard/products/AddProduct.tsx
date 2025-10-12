@@ -1,14 +1,22 @@
-
-import React, { useState, useRef } from 'react';
-import { Plus, Upload, ChefHat, DollarSign, Type, AlignLeft } from 'lucide-react';
-import { CategorySelector } from './CategorySelector';
-import { FoodTypeSelector } from './FoodTypeSelector';
-import { ImageUploadWithCrop } from './ImageUploadWithCrop';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { FoodType } from '@/constants/typeConstants';
-
+import React, { useState } from "react";
+import {
+  Plus,
+  Upload,
+  ChefHat,
+  Type,
+  AlignLeft,
+  IndianRupee,
+} from "lucide-react";
+import { CategorySelector } from "./CategorySelector";
+import { FoodTypeSelector } from "./FoodTypeSelector";
+import { ImageUploadWithCrop } from "./ImageUploadWithCrop";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { FoodType } from "@/constants/typeConstants";
+import toast from "react-hot-toast";
+import { useAppDispatch } from "@/store/hook";
+import { uploadProduct } from "@/api/product";
 
 export interface ProductFormData {
   name: string;
@@ -16,61 +24,94 @@ export interface ProductFormData {
   category: string;
   price: string;
   foodType: FoodType;
-  image: string | null;
+  imageFile: File | null;
+  imageUrl: string | null;
 }
 
 export const AddFoodProduct: React.FC = () => {
   const [formData, setFormData] = useState<ProductFormData>({
-    name: '',
-    description: '',
-    category: '',
-    price: '',
+    name: "",
+    description: "",
+    category: "",
+    price: "",
     foodType: FoodType.VEG,
-    image: null,
+    imageFile: null,
+    imageUrl: null,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const dispatch = useAppDispatch();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
   const handleCategoryChange = (category: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       category,
     }));
   };
 
   const handleFoodTypeChange = (foodType: FoodType) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       foodType,
     }));
   };
 
-  const handleImageChange = (image: string | null) => {
-    setFormData(prev => ({
+  const handleImageChange = (file: File | null) => {
+    setFormData((prev) => ({
       ...prev,
-      image,
+      imageFile: file,
+      imageUrl: file ? URL.createObjectURL(file) : null,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    console.log('Product Data:', formData);
-    setIsSubmitting(false);
+    if (!formData.imageFile) {
+      toast.error("Please upload an image for the dish.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("description", formData.description);
+    formDataToSend.append("categoryId", formData.category);
+    formDataToSend.append("price", formData.price);
+    formDataToSend.append("foodType", formData.foodType);
+    formDataToSend.append("image", formData.imageFile);
+
+    try {
+      const res = await dispatch(uploadProduct(formDataToSend));
+      if (res) {
+        setFormData({
+          name: "",
+          description: "",
+          category: "",
+          price: "",
+          foodType: FoodType.VEG,
+          imageFile: null,
+          imageUrl: null,
+        });
+      } else {
+        toast.error("Upload Failed");
+      }
+    } catch (error) {
+      console.error("Error uploading product:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
     // Handle form submission here
   };
 
@@ -85,7 +126,9 @@ export const AddFoodProduct: React.FC = () => {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
             Add New Dish
           </h1>
-          <p className="text-gray-400">Create a mouth-watering addition to your menu</p>
+          <p className="text-gray-400">
+            Create a mouth-watering addition to your menu
+          </p>
         </div>
 
         {/* Form Card */}
@@ -98,11 +141,11 @@ export const AddFoodProduct: React.FC = () => {
                 Food Image
               </label>
               <ImageUploadWithCrop
-                image={formData.image}
+                imageFile={formData.imageFile}
+                imageUrl={formData.imageUrl}
                 onImageChange={handleImageChange}
               />
             </div>
-
             {/* Name Field */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
@@ -116,8 +159,12 @@ export const AddFoodProduct: React.FC = () => {
                 onChange={handleInputChange}
                 placeholder="Enter delicious dish name..."
                 required
+                maxLength={25}
                 className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 transition-all duration-300"
               />
+              <div className="text-right text-xs text-gray-400">
+                {formData.name.length} / 25 characters
+              </div>
             </div>
 
             {/* Description Field */}
@@ -126,15 +173,21 @@ export const AddFoodProduct: React.FC = () => {
                 <AlignLeft className="w-4 h-4" />
                 Description
               </label>
-              <Textarea
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Describe the flavors, ingredients, and what makes this dish special..."
-                rows={4}
-                required
-                className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 transition-all duration-300 resize-none"
-              />
+              <div className="space-y-1">
+                <Textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  placeholder="Describe the flavors, ingredients, and what makes this dish special..."
+                  rows={4}
+                  required
+                  maxLength={90}
+                  className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 transition-all duration-300 resize-none"
+                />
+                <div className="text-right text-xs text-gray-400">
+                  {formData.description.length} / 90 characters
+                </div>
+              </div>
             </div>
 
             {/* Category and Food Type Row */}
@@ -165,7 +218,7 @@ export const AddFoodProduct: React.FC = () => {
             {/* Price Field */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-                <DollarSign className="w-4 h-4" />
+                <IndianRupee className="w-4 h-4" />
                 Price
               </label>
               <Input
@@ -175,7 +228,7 @@ export const AddFoodProduct: React.FC = () => {
                 onChange={handleInputChange}
                 placeholder="0.00"
                 min="0"
-                step="0.01"
+                step="1"
                 required
                 className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 transition-all duration-300"
               />

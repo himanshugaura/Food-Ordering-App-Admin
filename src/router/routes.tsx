@@ -7,6 +7,7 @@ import Products from "@/components/Dashboard/products/Products";
 import Category from "@/components/Dashboard/category/Category";
 import Analytics from "@/components/Dashboard/analytics/Analytics";
 import { AddFoodProduct } from "@/components/Dashboard/products/AddProduct";
+import { ProductDetails } from "@/components/Dashboard/products/ProductDetails";
 
 export const appRoutes: AppRoute[] = [
   { path: '/login', element: <Login />, guest: true },
@@ -19,7 +20,7 @@ export const appRoutes: AppRoute[] = [
       { path: "home", element: <Home /> },
       { path: "products", element: <Products /> },
       { path: "products/add", element: <AddFoodProduct /> },
-      { path: "product/:id", element: <div>Product Details</div> },
+      { path: "product/:id", element: <ProductDetails /> },
       { path: "category", element: <Category /> },
       { path: "analytics", element: <Analytics /> },
       { path: "settings", element: <Settings /> },

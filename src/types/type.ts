@@ -69,3 +69,17 @@ export interface Product  {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface Store {
+  _id: string;
+  name: string;
+  address: string;
+  logo: {
+    publicId: string;
+    url: string;
+  };
+  isOpen: boolean;
+  orderCounter: number;
+  createdAt: Date;
+  updatedAt: Date;
+}

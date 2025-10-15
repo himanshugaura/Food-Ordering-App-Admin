@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { CategorySelector } from "./CategorySelector";
 import { FoodTypeSelector } from "./FoodTypeSelector";
-import { ImageUploadWithCrop } from "./ImageUploadWithCrop";
+import { ImageUploadWithCrop } from "../../common/ImageUploadWithCrop";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";

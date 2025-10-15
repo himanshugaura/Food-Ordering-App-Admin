@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import { useParams, useNavigate } from "react-router-dom";
 import { removeCategory } from "@/store/features/category";
-import { ImageUploadWithCrop } from "../products/ImageUploadWithCrop";
+import { ImageUploadWithCrop } from "../../common/ImageUploadWithCrop";
 import { fetchCategoryById, updateCategory } from "@/api/category";
 
 // Interfaces

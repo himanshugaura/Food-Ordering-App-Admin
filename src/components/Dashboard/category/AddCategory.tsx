@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { useAppDispatch } from "@/store/hook";
 import { uploadCategory } from "@/api/category";
-import { ImageUploadWithCrop } from "../products/ImageUploadWithCrop";
+import { ImageUploadWithCrop } from "../../common/ImageUploadWithCrop";
 
 export interface CategoryFormData {
   name: string;

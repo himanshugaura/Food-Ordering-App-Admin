@@ -167,7 +167,7 @@ export const ImageUploadWithCrop: React.FC<ImageUploadWithCropProps> = ({
       <div className="relative group w-64 h-64">
         <img
           src={src}
-          alt="Food preview"
+          alt="image preview"
           className="w-full h-full object-cover rounded-xl border-2 border-purple-500/50 aspect-square"
         />
         <button

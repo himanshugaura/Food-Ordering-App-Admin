@@ -68,7 +68,7 @@ const Products = () => {
               {categories &&
                 categories.map((cat) => (
                   <option key={cat._id} value={cat.name}>
-                    {cat.name}
+                    {cat.name.toUpperCase()}
                   </option>
                 ))}
             </select>

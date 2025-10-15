@@ -7,6 +7,13 @@ export const AuthEndpoints = {
     LOGOUT: `${BASE_URL}/admin/auth/logout`,
 }
 
+export const StoreEndpoints = {
+    GET_STORE: `${BASE_URL}/store/details`,
+    UPDATE_STORE: `${BASE_URL}/store/update`,
+    STORE_OPEN_TOGGLE: `${BASE_URL}/store/toggle/status`,
+    RESET_ORDER_COUNTER: `${BASE_URL}/store/reset/order-counter`,
+}
+
 export const ProductEndpoints = {
     CREATE_PRODUCT: `${BASE_URL}/menu/add/product`,
     GET_ALL_PRODUCTS: `${BASE_URL}/menu/get-products`,

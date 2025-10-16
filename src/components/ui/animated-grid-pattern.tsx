@@ -1,3 +1,5 @@
+"use client"
+
 import {
   type ComponentPropsWithoutRef,
   useEffect,
@@ -32,6 +34,7 @@ export function AnimatedGridPattern({
   className,
   maxOpacity = 0.5,
   duration = 4,
+  repeatDelay = 0,
   ...props
 }: AnimatedGridPatternProps) {
   const id = useId()
@@ -73,7 +76,7 @@ export function AnimatedGridPattern({
     if (dimensions.width && dimensions.height) {
       setSquares(generateSquares(numSquares))
     }
-  }, [dimensions, numSquares, generateSquares])
+  }, [dimensions, numSquares])
 
   // Resize observer to update container dimensions
   useEffect(() => {

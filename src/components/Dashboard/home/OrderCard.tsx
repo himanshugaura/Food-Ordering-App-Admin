@@ -43,20 +43,17 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
     return date.toLocaleDateString("en-IN", options);
   };
 
-  const removeFromUI = () => {
-    if (order.status === "PENDING") {
-      dispatch(removePendingOrder(order._id));
-    } else if (order.status === "COOKING") {
-      dispatch(removeAcceptedOrder(order._id));
-    }
-  };
-
   const handleAccept = async () => {
     try {
       setAcceptLoading(true);
-      removeFromUI();
       const res = await dispatch(acceptOrder(order._id));
       if (res) {
+        // Remove from UI only if res is true
+        if (order.status === "PENDING") {
+          dispatch(removePendingOrder(order._id));
+        } else if (order.status === "COOKING") {
+          dispatch(removeAcceptedOrder(order._id));
+        }
         dispatch(addAcceptedOrders(order));
       }
     } catch (error) {
@@ -69,8 +66,14 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
   const handleReject = async () => {
     try {
       setRejectLoading(true);
-      removeFromUI();
-      await dispatch(rejectOrder(order._id));
+      const res = await dispatch(rejectOrder(order._id));
+      if (res) {
+        if (order.status === "PENDING") {
+          dispatch(removePendingOrder(order._id));
+        } else if (order.status === "COOKING") {
+          dispatch(removeAcceptedOrder(order._id));
+        }
+      }
     } catch (error) {
       console.error("Error rejecting order:", error);
     } finally {
@@ -81,8 +84,10 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
   const handleMarkAsPaidAndDelivered = async () => {
     try {
       setDeliveredLoading(true);
-      removeFromUI(); 
-      await dispatch(markOrderDelivered(order._id));
+      const res = await dispatch(markOrderDelivered(order._id));
+      if (res) {
+        dispatch(removeAcceptedOrder(order._id));
+      }
     } catch (error) {
       console.error("Error marking as paid & delivered:", error);
     } finally {
@@ -93,7 +98,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
   if (!order) {
     return null;
   }
-  
+
   return (
     <div className="bg-neutral-900 p-6 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:border-gray-600 transition-all duration-300 w-full max-w-full h-[560px] flex flex-col">
       {/* Header Section with Payment Status and Time */}
@@ -241,7 +246,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
               onClick={handleMarkAsPaidAndDelivered}
             >
               {deliveredLoading ? "Processing..." : "Paid & Delivered"}
-            </button>
+            </button> 
             <button
               className={`flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold text-sm py-3 px-4 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer ${rejectLoading ? "opacity-70 cursor-not-allowed" : ""}`}
               disabled={deliveredLoading || rejectLoading}

@@ -48,5 +48,5 @@ const orderSlice = createSlice({
   },
 });
 
-export const { setPendingOrders , setAcceptedOrders , addPendingOrders , addAcceptedOrders } = orderSlice.actions;
+export const { setPendingOrders , setAcceptedOrders , addPendingOrders , addAcceptedOrders , removeAcceptedOrder , removePendingOrder} = orderSlice.actions;
 export default orderSlice.reducer;

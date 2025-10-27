@@ -30,3 +30,14 @@ export const CategoryEndpoints = {
     UPDATE_CATEGORY: (id: string) => `${BASE_URL}/menu/update/category/${id}`,
     DELETE_CATEGORY: (id: string) => `${BASE_URL}/menu/delete/category/${id}`,
 }
+
+export const OrderEndpoints = {
+    GET_PENDING_ORDERS: `${BASE_URL}/order/pending`,
+    GET_ACCEPTED_ORDERS: `${BASE_URL}/order/accepted`,
+    ACCEPT_ORDER: (id: string) => `${BASE_URL}/order/accept/${id}`,
+    REJECT_ORDER: (id: string) => `${BASE_URL}/order/reject/${id}`,
+    MARK_ORDER_DELIVERED: (id: string) => `${BASE_URL}/order/delivered/${id}`,
+    GET_MONTHLY_ORDERS: `${BASE_URL}/order/search/monthly`,
+    GET_ORDERS_BY_DATE: `${BASE_URL}/order/search/date`,
+    GET_ORDERS_BY_CUSTOMER_NAME: `${BASE_URL}/order/search/name`,
+}

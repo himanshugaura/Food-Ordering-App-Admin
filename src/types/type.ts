@@ -17,30 +17,13 @@ export interface User {
   updatedAt: string;
 }
 
-export interface PendingOrder {
+export interface Customer {
   _id: string;
-  user: {
-    _id: string;
-    name: string;
-    avatar: string; 
-  };
-  orderItems: {
-    product: {
-      _id: string;
-      name: string;
-      image: string;
-      foodType: string;
-    };
-    quantity: number;
-    price: number;
-  }[];
-  orderNo: number;
-  totalAmount: number;
-  status: OrderStatus;
-  paymentMethod: PaymentMethod;
-  isPaid: boolean;
-  createdAt: string;
-  updatedAt: string;
+  name: string;
+  username: string;
+  avatar: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Category  {
@@ -80,6 +63,27 @@ export interface Store {
   };
   isOpen: boolean;
   orderCounter: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+
+export interface OrderItem {
+  product: Product ;   
+  quantity: number;          
+}
+
+export interface Orders  {
+  _id: string;
+  user: Customer;
+  orderItems: OrderItem[];  
+  orderNo: number;
+  totalAmount: number;
+  status: OrderStatus;
+  paymentMethod : PaymentMethod;
+  isPaid : boolean;
+  razorpayOrderId?: string;
+  razorpayPaymentId?: string;
   createdAt: Date;
   updatedAt: Date;
 }

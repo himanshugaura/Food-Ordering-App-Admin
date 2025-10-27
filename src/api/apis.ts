@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL + "/api";
 
 export const AuthEndpoints = {
     LOGIN: `${BASE_URL}/admin/auth/login`,

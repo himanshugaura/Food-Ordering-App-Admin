@@ -23,14 +23,14 @@ const orderSlice = createSlice({
     },
     addAcceptedOrders: (state, action: PayloadAction<Orders>) => {
         if (state.acceptedOrders) {
-            state.acceptedOrders.push(action.payload);
+            state.acceptedOrders.unshift(action.payload);
         } else {
             state.acceptedOrders = [action.payload];
         }
     },
     addPendingOrders: (state, action: PayloadAction<Orders>) => {
         if (state.pendingOrders) {
-            state.pendingOrders.push(action.payload);
+            state.pendingOrders.unshift(action.payload);
         } else {
             state.pendingOrders = [action.payload];
         }

@@ -1,9 +1,12 @@
 import type { Orders } from "@/types/type";
 import OrderCard from "./OrderCard"
 import { useSelector } from "react-redux"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "@/store/hook";
 import { fetchAcceptedOrders, fetchPendingOrders } from "@/api/order";
+import { connectSocket, disconnectSocket, socket } from "@/lib/socket";
+import { addPendingOrders } from "@/store/features/order.slice";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState<'pending' | 'accepted'>('pending');
@@ -18,6 +21,47 @@ const Home = () => {
     };
     fetchData();
   }, [dispatch]);
+  
+  
+
+  const notifyAudioRef = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      notifyAudioRef.current = new Audio("/notification.mp3");
+    }
+  }, []);
+
+
+   useEffect(() => {
+    connectSocket();
+
+    
+      socket.emit(
+        "joinRoom",
+        `store:orders`
+      );
+      
+    const playSound = () => {
+      try {
+        notifyAudioRef.current?.play();
+      } catch (e) {
+        console.error("Error playing notification sound:", e);
+      }
+    };
+
+    const handleOrderPlaced = (payload: any) => {
+      dispatch(addPendingOrders(payload.data));
+      toast(payload.message);
+      playSound();
+    };
+    socket.on("placeOrder", handleOrderPlaced);
+
+    return () => {
+      disconnectSocket();
+      socket.off("placeOrder", handleOrderPlaced);
+    };
+  }, [dispatch]);
+
 
   const currentOrders = activeTab === 'pending' ? pendingOrders : acceptedOrders;
 

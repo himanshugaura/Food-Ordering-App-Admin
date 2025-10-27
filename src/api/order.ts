@@ -1,7 +1,7 @@
 import type { AppDispatch } from "@/store/store";
 import { apiConnector } from "@/utils/apiConnector";
 import { OrderEndpoints } from "./apis";
-import { removeAcceptedOrder, removePendingOrder, setAcceptedOrders, setPendingOrders } from "@/store/features/order.slice";
+import { setAcceptedOrders, setPendingOrders } from "@/store/features/order.slice";
 import type { Orders } from "@/types/type";
 import toast from "react-hot-toast";
 
@@ -46,7 +46,7 @@ export const fetchAcceptedOrders =
     }
   };
 
-export const acceptOrder = (orderId: string) => async (dispatch : AppDispatch): Promise<boolean> => {
+export const acceptOrder = (orderId: string) => async (): Promise<boolean> => {
   try {
     const res = await apiConnector(
       "POST",
@@ -55,7 +55,6 @@ export const acceptOrder = (orderId: string) => async (dispatch : AppDispatch): 
 
     if (res.success) {
       toast.success("Order accepted");
-      dispatch(removeAcceptedOrder(orderId));
       return true;
     } else {
       toast.error("Failed to accept order");
@@ -78,8 +77,6 @@ export const rejectOrder = (orderId: string) => async (): Promise<boolean> => {
     
     if (res.success) {
       toast.success("Order rejected");
-      removePendingOrder(orderId);
-      removeAcceptedOrder(orderId);
       return true;
     } else {
       toast.error("Failed to reject order");
@@ -101,7 +98,6 @@ export const markOrderDelivered =
       );      
       if (res.success) {
         toast.success("Order marked as delivered");
-        removeAcceptedOrder(orderId);
         return true;
       } else {
         toast.error("Failed to mark order as delivered");

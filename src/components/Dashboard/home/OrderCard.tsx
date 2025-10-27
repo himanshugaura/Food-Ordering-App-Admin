@@ -1,5 +1,5 @@
 import { acceptOrder, rejectOrder, markOrderDelivered } from "@/api/order";
-import { addAcceptedOrders } from "@/store/features/order.slice";
+import { addAcceptedOrders, removeAcceptedOrder, removePendingOrder } from "@/store/features/order.slice";
 import { useAppDispatch } from "@/store/hook";
 import type { Orders } from "@/types/type";
 import { Beef, Leaf } from "lucide-react";
@@ -14,72 +14,86 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
   const displayItems = showAll ? order.orderItems : order.orderItems.slice(0, 3);
   const hasMoreItems = order.orderItems.length > 3;
 
-  const [loading, setLoading] = useState(false);
+  const [acceptLoading, setAcceptLoading] = useState(false);
+  const [rejectLoading, setRejectLoading] = useState(false);
+  const [deliveredLoading, setDeliveredLoading] = useState(false);
+
   const dispatch = useAppDispatch();
 
   // Convert UTC to Indian Time
   const formatIndianTime = (utcDate: string) => {
     const date = new Date(utcDate);
     const options: Intl.DateTimeFormatOptions = {
-      hour: '2-digit',
-      minute: '2-digit',
+      hour: "2-digit",
+      minute: "2-digit",
       hour12: true,
-      timeZone: 'Asia/Kolkata'
+      timeZone: "Asia/Kolkata",
     };
-    return date.toLocaleTimeString('en-IN', options);
+    return date.toLocaleTimeString("en-IN", options);
   };
 
   const formatIndianDate = (utcDate: string) => {
     const date = new Date(utcDate);
     const options: Intl.DateTimeFormatOptions = {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      timeZone: 'Asia/Kolkata'
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      timeZone: "Asia/Kolkata",
     };
-    return date.toLocaleDateString('en-IN', options);
+    return date.toLocaleDateString("en-IN", options);
+  };
+
+  const removeFromUI = () => {
+    if (order.status === "PENDING") {
+      dispatch(removePendingOrder(order._id));
+    } else if (order.status === "COOKING") {
+      dispatch(removeAcceptedOrder(order._id));
+    }
   };
 
   const handleAccept = async () => {
     try {
-      setLoading(true);
-      const res = await dispatch(acceptOrder(order._id)); 
+      setAcceptLoading(true);
+      removeFromUI();
+      const res = await dispatch(acceptOrder(order._id));
       if (res) {
         dispatch(addAcceptedOrders(order));
-      } 
+      }
     } catch (error) {
       console.error("Error accepting order:", error);
     } finally {
-      setLoading(false);
+      setAcceptLoading(false);
     }
-  }
+  };
 
   const handleReject = async () => {
     try {
-      setLoading(true);
+      setRejectLoading(true);
+      removeFromUI();
       await dispatch(rejectOrder(order._id));
     } catch (error) {
       console.error("Error rejecting order:", error);
     } finally {
-      setLoading(false);
+      setRejectLoading(false);
     }
-  }
+  };
 
   const handleMarkAsPaidAndDelivered = async () => {
     try {
-      setLoading(true);
+      setDeliveredLoading(true);
+      removeFromUI(); 
       await dispatch(markOrderDelivered(order._id));
     } catch (error) {
       console.error("Error marking as paid & delivered:", error);
     } finally {
-      setLoading(false);
+      setDeliveredLoading(false);
     }
-  }
+  };
 
   if (!order) {
     return null;
   }
-
+  
   return (
     <div className="bg-neutral-900 p-6 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:border-gray-600 transition-all duration-300 w-full max-w-full h-[560px] flex flex-col">
       {/* Header Section with Payment Status and Time */}
@@ -203,37 +217,37 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
       <div className="flex gap-3 flex-shrink-0">
         {order.status === "PENDING" && (
           <>
-            <button 
-              className={`flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold text-sm py-3 px-4 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
-              disabled={loading}
+            <button
+              className={`flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold text-sm py-3 px-4 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer ${acceptLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+              disabled={acceptLoading || rejectLoading}
               onClick={handleAccept}
             >
-              {loading ? 'Accepting...' : 'Accept'} 
+              {acceptLoading ? "Accepting..." : "Accept"}
             </button>
-            <button 
-              className={`flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold text-sm py-3 px-4 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
-              disabled={loading}
+            <button
+              className={`flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold text-sm py-3 px-4 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer ${rejectLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+              disabled={acceptLoading || rejectLoading}
               onClick={handleReject}
             >
-              {loading ? 'Rejecting...' : 'Reject'}
+              {rejectLoading ? "Rejecting..." : "Reject"}
             </button>
           </>
         )}
         {order.status === "COOKING" && (
           <>
             <button
-              className={`flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm py-3 px-4 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
-              disabled={loading}
+              className={`flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm py-3 px-4 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer ${deliveredLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+              disabled={deliveredLoading || rejectLoading}
               onClick={handleMarkAsPaidAndDelivered}
             >
-              {loading ? 'Processing...' : "Paid & Delivered"}
+              {deliveredLoading ? "Processing..." : "Paid & Delivered"}
             </button>
             <button
-              className={`flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold text-sm py-3 px-4 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
-              disabled={loading}
+              className={`flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold text-sm py-3 px-4 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95 cursor-pointer ${rejectLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+              disabled={deliveredLoading || rejectLoading}
               onClick={handleReject}
             >
-              {loading ? 'Cancelling...' : "Cancel"}
+              {rejectLoading ? "Cancelling..." : "Cancel"}
             </button>
           </>
         )}

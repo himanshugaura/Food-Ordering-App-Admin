@@ -76,6 +76,10 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
     }
   }
 
+  if (!order) {
+    return null;
+  }
+
   return (
     <div className="bg-neutral-900 p-6 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:border-gray-600 transition-all duration-300 w-full max-w-full h-[560px] flex flex-col">
       {/* Header Section with Payment Status and Time */}

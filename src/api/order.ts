@@ -10,7 +10,8 @@ export const fetchPendingOrders =
   async (dispatch: AppDispatch): Promise<boolean> => {
     try {
       const res = await apiConnector("GET", OrderEndpoints.GET_PENDING_ORDERS);
-
+      console.log("pending orders" , res);
+      
       if (res.success && res.data) {
         dispatch(setPendingOrders(res.data as Orders[]));
         return true;
@@ -30,7 +31,7 @@ export const fetchAcceptedOrders =
   async (dispatch: AppDispatch): Promise<boolean> => {
     try {
       const res = await apiConnector("GET", OrderEndpoints.GET_ACCEPTED_ORDERS);
-      
+      console.log("Accepted Orders:", res);
       if (res.success && res.data) {
         dispatch(setAcceptedOrders(res.data as Orders[]));
         return true;

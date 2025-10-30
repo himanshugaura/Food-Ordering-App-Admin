@@ -2,8 +2,9 @@ import type { AppDispatch } from "@/store/store";
 import { apiConnector } from "@/utils/apiConnector";
 import { OrderEndpoints } from "./apis";
 import { setAcceptedOrders, setPendingOrders } from "@/store/features/order.slice";
-import type { Orders } from "@/types/type";
+import type { Orders, Stats } from "@/types/type";
 import toast from "react-hot-toast";
+import { setStats } from "@/store/features/analytics";
 
 export const fetchPendingOrders =
   () =>
@@ -109,3 +110,26 @@ export const markOrderDelivered =
       return false;
     }
   };
+
+export const getMonthlyStats = (month: number) => async (dispatch : AppDispatch):Promise<boolean> => {
+  try {
+    const res = await apiConnector(
+      "GET",
+      `${OrderEndpoints.GET_MONTHLY_STATS}?month=${month}`
+    );
+    
+    if (res.success && res.data) {
+      dispatch(setStats(res.data as Stats));
+      return true;
+    } 
+    else {
+      toast.error("Failed to fetch monthly stats");
+      return false;
+    }
+  }
+  catch (error) {
+    console.error("Get monthly stats error:", error);
+    toast.error("Failed to fetch monthly stats");
+    return false;
+  }
+};

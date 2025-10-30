@@ -1,4 +1,8 @@
-import type { FoodType, OrderStatus, PaymentMethod } from "@/constants/typeConstants";
+import type {
+  FoodType,
+  OrderStatus,
+  PaymentMethod,
+} from "@/constants/typeConstants";
 import type { JSX } from "react";
 
 export interface AppRoute {
@@ -26,7 +30,7 @@ export interface Customer {
   updatedAt: Date;
 }
 
-export interface Category  {
+export interface Category {
   _id: string;
   name: string;
   image: {
@@ -37,7 +41,7 @@ export interface Category  {
   updatedAt: string;
 }
 
-export interface Product  {
+export interface Product {
   _id: string;
   name: string;
   description: string;
@@ -67,23 +71,28 @@ export interface Store {
   updatedAt: Date;
 }
 
-
 export interface OrderItem {
-  product: Product ;   
-  quantity: number;          
+  product: Product;
+  quantity: number;
 }
 
-export interface Orders  {
+export interface Orders {
   _id: string;
   user: Customer;
-  orderItems: OrderItem[];  
+  orderItems: OrderItem[];
   orderNo: number;
   totalAmount: number;
   status: OrderStatus;
-  paymentMethod : PaymentMethod;
-  isPaid : boolean;
+  paymentMethod: PaymentMethod;
+  isPaid: boolean;
   razorpayOrderId?: string;
   razorpayPaymentId?: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface Stats {
+  totalOrders: number;
+  totalRevenue: number;
+  ordersDelivered: number;
 }

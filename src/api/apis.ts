@@ -40,4 +40,5 @@ export const OrderEndpoints = {
     GET_MONTHLY_ORDERS: `${BASE_URL}/order/search/monthly`,
     GET_ORDERS_BY_DATE: `${BASE_URL}/order/search/date`,
     GET_ORDERS_BY_CUSTOMER_NAME: `${BASE_URL}/order/search/name`,
+    GET_MONTHLY_STATS: `${BASE_URL}/order/stats/monthly`,
 }
